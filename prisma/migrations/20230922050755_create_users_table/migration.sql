@@ -1,9 +1,10 @@
 -- CreateTable
-CREATE TABLE `user` (
+CREATE TABLE `users` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(200) NOT NULL,
     `email` VARCHAR(200) NOT NULL,
     `password` VARCHAR(200) NOT NULL,
+    `number` INTEGER NOT NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)
