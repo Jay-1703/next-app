@@ -12,19 +12,38 @@ import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Loader from './Loader';
 
-export default function Employeeslist({loading,employees,handleClickOpen,getEmployees}) {
+export default function Employeeslist({loading,employees,handleClickOpen,getEmployees,setModelType,setShowOneEmployee,setId}) {
+
   const deleteEmployee = async (id) => {
-    console.log(id);
-    const res = await fetch(`/api/dashboard/deleteemployee/${id}`,{
-      method: "DELETE",
-    });
-    if (res.status == 200) {
-      getEmployees();
-    }
-    else{
-      alert("hdisgid");
-    }
+    setModelType("Delete employee");
+    handleClickOpen();
+    setId(id);
   }
+
+  const updateEmployee = async (id) =>{
+    setModelType("Update employee");
+    const res = await fetch(`/api/dashboard/showemployee/${id}`,{
+      method: "GET",
+    });
+    const data = await res.json();
+    if (data.length >= 0) {
+      setShowOneEmployee(data);
+    }
+    handleClickOpen();
+  }
+
+  const showEmployee = async (id) =>{
+    setModelType("Show employee");
+    const res = await fetch(`/api/dashboard/showemployee/${id}`,{
+      method: "GET",
+    });
+    const data = await res.json();
+    if (data.length >= 0) {
+      setShowOneEmployee(data);
+    }
+    handleClickOpen();
+  }
+
   return (
     <TableContainer component={Paper}>
       {loading?<Loader></Loader>:null}
@@ -46,13 +65,13 @@ export default function Employeeslist({loading,employees,handleClickOpen,getEmpl
               <TableCell>{row.city}</TableCell>
               <TableCell>{row.number}</TableCell>
               <TableCell className='text-center'>
-                <IconButton onClick={()=>{deleteEmployee(row.id)}}aria-label="delete" size='small' className='bg-rose-100 text-red-600 hover:bg-rose-100 mx-1'>
+                <IconButton onClick={()=>{deleteEmployee(row.id)}} aria-label="delete" size='small' className='bg-rose-100 text-red-600 hover:bg-rose-100 mx-1'>
                   <DeleteIcon />
                 </IconButton>
-                <IconButton aria-label="delete" size='small' className='bg-green-200 text-green-600 hover:bg-green-200 mx-1'>
+                <IconButton onClick={()=>{updateEmployee(row.id)}} aria-label="edit" size='small' className='bg-green-200 text-green-600 hover:bg-green-200 mx-1'>
                   <ModeEditOutlineIcon />
                 </IconButton>
-                <IconButton aria-label="delete" size='small' className='bg-yellow-200 text-yellow-500 hover:bg-yellow-200 mx-1'>
+                <IconButton onClick={()=>{showEmployee(row.id)}} aria-label="show" size='small' className='bg-yellow-200 text-yellow-500 hover:bg-yellow-200 mx-1'>
                   <VisibilityIcon />
                 </IconButton>
               </TableCell>
