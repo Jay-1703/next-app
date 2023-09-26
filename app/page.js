@@ -1,11 +1,19 @@
+'use client';
 import Image from 'next/image'
 import Link from 'next/link'
-import Register from './pages/register/page'
+import { useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+import Login from './pages/login/page';
 
 export default function Home() {
+  const { data:session } = useSession();
+  if (session) {
+    const router = useRouter();
+    router.push('/components/dashboard/');
+}
   return (
-    <main className="">
-        <Register/>
+    <main>
+        <Login/>
     </main>
   )
 }

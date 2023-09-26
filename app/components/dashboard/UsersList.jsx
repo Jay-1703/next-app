@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import Loader from './Loader';
+import Loader from '../../loading';
 
 export default function Employeeslist({loading,employees,handleClickOpen,getEmployees,setModelType,setShowOneEmployee,setId}) {
 

@@ -1,197 +1,101 @@
 'use client';
+
 import * as React from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import Navigator from './Navigator';
-import Content from './Content';
-import Header from './Header';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import HomeIcon from '@mui/icons-material/Home';
+import PeopleIcon from '@mui/icons-material/People';
+import DnsRoundedIcon from '@mui/icons-material/DnsRounded';
+import PermMediaOutlinedIcon from '@mui/icons-material/PhotoSizeSelectActual';
+import PublicIcon from '@mui/icons-material/Public';
+import SettingsEthernetIcon from '@mui/icons-material/SettingsEthernet';
+import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputComponent';
+import TimerIcon from '@mui/icons-material/Timer';
+import SettingsIcon from '@mui/icons-material/Settings';
+import PhonelinkSetupIcon from '@mui/icons-material/PhonelinkSetup';
 
-let theme = createTheme({
-  palette: {
-    primary: {
-      light: '#63ccff',
-      main: '#009be5',
-      dark: '#006db3',
-    },
-  },
-  typography: {
-    h5: {
-      fontWeight: 500,
-      fontSize: 26,
-      letterSpacing: 0.5,
-    },
-  },
-  shape: {
-    borderRadius: 8,
-  },
-  components: {
-    MuiTab: {
-      defaultProps: {
-        disableRipple: true,
+const categories = [
+  {
+    id: 'Build',
+    children: [
+      {
+        id: 'Authentication',
+        icon: <PeopleIcon />,
+        active: true,
       },
-    },
+      { id: 'Database', icon: <DnsRoundedIcon /> },
+      { id: 'Storage', icon: <PermMediaOutlinedIcon /> },
+      { id: 'Hosting', icon: <PublicIcon /> },
+      { id: 'Functions', icon: <SettingsEthernetIcon /> },
+      {
+        id: 'Machine learning',
+        icon: <SettingsInputComponentIcon />,
+      },
+    ],
   },
-  mixins: {
-    toolbar: {
-      minHeight: 48,
-    },
+  {
+    id: 'Quality',
+    children: [
+      { id: 'Analytics', icon: <SettingsIcon /> },
+      { id: 'Performance', icon: <TimerIcon /> },
+      { id: 'Test Lab', icon: <PhonelinkSetupIcon /> },
+    ],
   },
-});
+];
 
-theme = {
-  ...theme,
-  components: {
-    MuiDrawer: {
-      styleOverrides: {
-        paper: {
-          backgroundColor: '#081627',
-        },
-      },
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-        },
-        contained: {
-          boxShadow: 'none',
-          '&:active': {
-            boxShadow: 'none',
-          },
-        },
-      },
-    },
-    MuiTabs: {
-      styleOverrides: {
-        root: {
-          marginLeft: theme.spacing(1),
-        },
-        indicator: {
-          height: 3,
-          borderTopLeftRadius: 3,
-          borderTopRightRadius: 3,
-          backgroundColor: theme.palette.common.white,
-        },
-      },
-    },
-    MuiTab: {
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-          margin: '0 16px',
-          minWidth: 0,
-          padding: 0,
-          [theme.breakpoints.up('md')]: {
-            padding: 0,
-            minWidth: 0,
-          },
-        },
-      },
-    },
-    MuiIconButton: {
-      styleOverrides: {
-        root: {
-          padding: theme.spacing(1),
-        },
-      },
-    },
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          borderRadius: 4,
-        },
-      },
-    },
-    MuiDivider: {
-      styleOverrides: {
-        root: {
-          backgroundColor: 'rgb(255,255,255,0.15)',
-        },
-      },
-    },
-    MuiListItemButton: {
-      styleOverrides: {
-        root: {
-          '&.Mui-selected': {
-            color: '#4fc3f7',
-          },
-        },
-      },
-    },
-    MuiListItemText: {
-      styleOverrides: {
-        primary: {
-          fontSize: 14,
-          fontWeight: theme.typography.fontWeightMedium,
-        },
-      },
-    },
-    MuiListItemIcon: {
-      styleOverrides: {
-        root: {
-          color: 'inherit',
-          minWidth: 'auto',
-          marginRight: theme.spacing(2),
-          '& svg': {
-            fontSize: 20,
-          },
-        },
-      },
-    },
-    MuiAvatar: {
-      styleOverrides: {
-        root: {
-          width: 32,
-          height: 32,
-        },
-      },
-    },
+const item = {
+  py: '2px',
+  px: 3,
+  color: 'rgba(255, 255, 255, 0.7)',
+  '&:hover, &:focus': {
+    bgcolor: 'rgba(255, 255, 255, 0.08)',
   },
 };
 
-const drawerWidth = 256;
+const itemCategory = {
+  boxShadow: '0 -1px 0 rgb(255,255,255,0.1) inset',
+  py: 1.5,
+  px: 3,
+};
 
-export default function Sidebar() {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+export default function Sidebar(props) {
+  const { ...other } = props;
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-        <CssBaseline />
-        <Box
-          component="nav"
-          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        >
-          {isSmUp ? null : (
-            <Navigator
-              PaperProps={{ style: { width: drawerWidth } }}
-              variant="temporary"
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-            />
-          )}
-
-          <Navigator
-            PaperProps={{ style: { width: drawerWidth } }}
-            sx={{ display: { sm: 'block', xs: 'none' } }}
-          />
-        </Box>
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <Header onDrawerToggle={handleDrawerToggle} />
-          <Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: '#eaeff1' }}>
-            <Content />
+    <Drawer variant="permanent" {...other}>
+      <List disablePadding>
+        <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}>
+          Paperbase
+        </ListItem>
+        <ListItem sx={{ ...item, ...itemCategory }}>
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText>Project Overview</ListItemText>
+        </ListItem>
+        {categories.map(({ id, children }) => (
+          <Box key={id} sx={{ bgcolor: '#101F33' }}>
+            <ListItem sx={{ py: 2, px: 3 }}>
+              <ListItemText sx={{ color: '#fff' }}>{id}</ListItemText>
+            </ListItem>
+            {children.map(({ id: childId, icon, active }) => (
+              <ListItem disablePadding key={childId}>
+                <ListItemButton selected={active} sx={item}>
+                  <ListItemIcon>{icon}</ListItemIcon>
+                  <ListItemText>{childId}</ListItemText>
+                </ListItemButton>
+              </ListItem>
+            ))}
+            <Divider sx={{ mt: 2 }} />
           </Box>
-        </Box>
-      </Box>
-    </ThemeProvider>
+        ))}
+      </List>
+    </Drawer>
   );
 }

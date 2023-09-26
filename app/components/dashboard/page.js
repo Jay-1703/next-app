@@ -1,10 +1,10 @@
 import React from 'react'
-import Sidebar from './Sidebar'
+import Dashboard from './dashboard'
 
 function dashboard() {
   return (
     <div>
-      <Sidebar/>
+      <Dashboard/>
     </div>
   )
 }

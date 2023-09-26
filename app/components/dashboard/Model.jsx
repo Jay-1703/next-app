@@ -11,15 +11,15 @@ import Link from 'next/link';
 
 export default function Model({ open, handleClose, modelType, getEmployees, showOneEmployee, id }) {
   const showEmployeeData = showOneEmployee;
-  
+
   const [name, setName] = React.useState();
   const [email, setEmail] = React.useState();
   const [city, setCity] = React.useState();
   const [number, setNumber] = React.useState();
-  
+
   const [loading, setLoading] = React.useState(false);
 
-  
+
   const deleteEmployee = async () => {
     const res = await fetch(`/api/dashboard/deleteemployee/${id}`, {
       method: "DELETE",
@@ -194,12 +194,6 @@ export default function Model({ open, handleClose, modelType, getEmployees, show
   }
 
   else if (modelType === "Update employee") {
-    useEffect(() => {
-      setName(showOneEmployee[0].employee_name);
-      setEmail(showOneEmployee[0].email);
-      setCity(showOneEmployee[0].city);
-      setNumber(showOneEmployee[0].number);
-    }, []);
     return (
       <div>
         <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
