@@ -10,8 +10,11 @@ npm run dev
 yarn dev
 # or
 pnpm dev
+<<<<<<< HEAD
 # or
 bun dev
+=======
+>>>>>>> b502ac96de00d4d7218b84d167cd60c2f7ea5f3b
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
