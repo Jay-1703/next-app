@@ -12,10 +12,6 @@ model Users {
   username String @db.VarChar(200)
   email    String @unique @db.VarChar(200)
   password String @db.VarChar(200)
-<<<<<<< HEAD
-=======
-  number   Int 
->>>>>>> b502ac96de00d4d7218b84d167cd60c2f7ea5f3b
 }
 
 model Employees {
@@ -23,9 +19,5 @@ model Employees {
   employee_name String @db.VarChar(100)
   email String @db.VarChar(100) @unique
   city String @db.VarChar(100)
-<<<<<<< HEAD
-  number Int 
-=======
-  number Int @db.UnsignedInt()
->>>>>>> b502ac96de00d4d7218b84d167cd60c2f7ea5f3b
+  number BigInt
 }

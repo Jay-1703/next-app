@@ -22,6 +22,7 @@ export const authOptions = {
       },
       async authorize(credentials, req) {
         try {
+
           const res = await prisma.users.findMany({ where: { email: credentials.email } });
           const user = res[0];
           if (user) {
@@ -39,9 +40,14 @@ export const authOptions = {
           }
           else {
             if (credentials?.name) {
-              const res = await prisma.users.create({ data: { username: credentials.name, email: credentials.email, password: credentials.password } });
+              const res = await prisma.users.create({ data: { username: credentials.name, email: credentials.email , password:credentials.password} });
               return res;
-            } else {
+            } else if(credentials?.name && !credentials.password){
+              let password = Math.floor(Math.random() * 1000);
+              const res = await prisma.users.create({ data: { username: credentials.name, email: credentials.email , password:credentials.password} });
+              return res;
+            }
+            else {
               console.log('Username is required for registration !!');
             }
             return null;
@@ -62,8 +68,9 @@ export const authOptions = {
           session.user.name = userdata.username;
           session.user.email = userdata.email;
         } else {
-          if (session?.user?.name) {
-            const res = await prisma.users.create({ data: { username: session.user.name, email: session.user.email } });
+          if (session?.user?.name && !session?.user?.password) {
+            let password = Math.floor(Math.random() * 1000);
+            const res = await prisma.users.create({ data: { username: session.user.name, email: session.user.email ,password : password.toString()} });
             session.user.name = res.username;
             session.user.email = res.email;
           } else {

@@ -15,7 +15,8 @@ CREATE TABLE `Employees` (
     `employee_name` VARCHAR(100) NOT NULL,
     `email` VARCHAR(100) NOT NULL,
     `city` VARCHAR(100) NOT NULL,
-    `number` INTEGER NOT NULL,
+    `dob` DATETIME(3) NOT NULL,
+    `salary` BIGINT NOT NULL,
 
     UNIQUE INDEX `Employees_email_key`(`email`),
     PRIMARY KEY (`id`)
