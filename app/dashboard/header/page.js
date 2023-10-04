@@ -57,25 +57,25 @@ function Header(props) {
             </Box>
             {/* --------------- Other options for user -------------- */}
             <Menu anchorEl={anchorEl} id="account-menu" open={open} onClose={handleClose} onClick={handleClose} transformOrigin={{ horizontal: 'right', vertical: 'top' }} anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
-              <Box className='py-3'>
+              <Box className='py-6 w-64'>
                 <menuItem className='flex justify-center'>
                   {
-                    session.user.image ? <Avatar className='h-14 w-14'>
+                    session.user.image ? <Avatar className='h-20 w-20 border border-gray-300'>
                       <img src={session.user.image}></img>
-                    </Avatar> : <AccountCircleIcon className='w-14 h-14' />
+                    </Avatar> : <AccountCircleIcon className='w-20 h-20' />
                   }
                 </menuItem>
-                <Box className='text-black text-md text-center py-1'>
+                <Box className='text-black text-md text-center pt-1'>
                   {
-                    session.user.name ? <p>Hii, {session.user.name}</p> :
-                      <div className='text-center'>
+                    session.user.name ? <Box className='text-center px-10 text-lg'><p>Hii, {session.user.name}</p></Box> :
+                      <Box className='text-center text-md'>
                         <p>Hii,</p>
                         <p>{session.user.email}</p>
-                      </div>
+                      </Box>
                   }
                 </Box>
               </Box>
-              <Box className='px-0'>
+              <Box className="px-1">
                 <MenuItem onClick={handleClose}>
                   <AccountCircleIcon className='mr-3' fontSize='medium' /><span>Profile</span>
                 </MenuItem>
@@ -87,7 +87,7 @@ function Header(props) {
                   <Settings className='mr-3' fontSize="medium" /><span>Settings</span>
                 </MenuItem>
                 <MenuItem onClick={() => signOut()}>
-                  <Logout className='mr-3' fontSize="medium" /><span>Logout</span>
+                  <Logout className='mr-2.5 ml-1' fontSize="medium" /><span>Logout</span>
                 </MenuItem>
               </Box>
             </Menu>

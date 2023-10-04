@@ -22,7 +22,6 @@ export const authOptions = {
       },
       async authorize(credentials, req) {
         try {
-
           const res = await prisma.users.findMany({ where: { email: credentials.email } });
           const user = res[0];
           if (user) {

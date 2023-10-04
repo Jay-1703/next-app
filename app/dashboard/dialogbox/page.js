@@ -10,7 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Grid, OutlinedInput } from '@mui/material';
+import { Box, Grid, OutlinedInput } from '@mui/material';
 
 export default function Model({ open, handleClose, modelType, getEmployees, showOneEmployee, id, updateEmployeeData, handleClickSnackbar, setOpenSnackbarType, employees }) {
 
@@ -38,11 +38,11 @@ export default function Model({ open, handleClose, modelType, getEmployees, show
       url: '/api/dashboard/addemployee',
       data: JSON.stringify({ 'name': name, 'email': email, 'city': city, 'number': number }),
     });
-    setLoading(false);
     handleClose();
     setOpenSnackbarType('Add employee');
     handleClickSnackbar();
     getEmployees();
+    setLoading(false);
   }
 
   //--------------- Update employee --------------
@@ -60,11 +60,11 @@ export default function Model({ open, handleClose, modelType, getEmployees, show
       method: 'PUT',
       data: JSON.stringify(requestBody)
     })
-    setLoading(false);
     getEmployees();
     handleClose();
     setOpenSnackbarType('Update employee');
     handleClickSnackbar();
+    setLoading(false);
   }
 
   //--------------- Generate PDF --------------
@@ -80,6 +80,30 @@ export default function Model({ open, handleClose, modelType, getEmployees, show
     pdf.addImage(imageData, 'PNG', 10, 10, 180, 0); // Adjust the dimensions as needed
     // Save the PDF
     pdf.save('employees list');
+  };
+
+  //--------------- Generate CSV --------------
+  const tableToCsv = (table) => {
+    const rows = table.querySelectorAll('tr');
+    const csvArray = [];
+    for (const row of rows) {
+      const cols = row.querySelectorAll('td, th');
+      const rowArray = Array.from(cols, cell => cell.textContent);
+      csvArray.push(rowArray.join(','));
+    }
+    return csvArray.join('\n');
+  };
+
+  //--------------- Generate CSV-to-EXCEL --------------
+  const handleExportToExcel = () => {
+    const table = document.getElementById('alert-dialog-description');  // Replace with your actual table ID
+    const csvContent = tableToCsv(table);
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'employee list.csv';
+    link.click();
   };
 
   if (modelType === "Add employee") {
@@ -295,22 +319,28 @@ export default function Model({ open, handleClose, modelType, getEmployees, show
       <div>
         <Dialog fullScreen open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
           <DialogContent>
-            <div className='flex my-4  justify-end'>
-              <button onClick={handleGeneratePDF} type="button" data-modal-toggle="add-user-modal" className="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center bg-blue-600 text-white rounded sm:w-auto">
-                <svg className="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd" />
-                </svg>
-                Generate PDF
-              </button>
-            </div>
+            <Box className='flex justify-end'>
+              <Box className='my-4 mx-1'>
+                <button onClick={handleGeneratePDF} type="button" data-modal-toggle="add-user-modal" className="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center bg-red-600 text-white rounded sm:w-auto">
+                  <svg fill="#f7f7f7" className="w-5 h-5 mr-2 -ml-1" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 482.14 482.14" xmlSpace="preserve" stroke="#f7f7f7"> <g id="SVGRepo_bgCarrier" strokeWidth={0} /> <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" /> <g id="SVGRepo_iconCarrier">   {" "}   <g>     {" "}     <path d="M142.024,310.194c0-8.007-5.556-12.782-15.359-12.782c-4.003,0-6.714,0.395-8.132,0.773v25.69 c1.679,0.378,3.743,0.504,6.588,0.504C135.57,324.379,142.024,319.1,142.024,310.194z" />{" "}     <path d="M202.709,297.681c-4.39,0-7.227,0.379-8.905,0.772v56.896c1.679,0.394,4.39,0.394,6.841,0.394 c17.809,0.126,29.424-9.677,29.424-30.449C230.195,307.231,219.611,297.681,202.709,297.681z" />{" "}     <path d="M315.458,0H121.811c-28.29,0-51.315,23.041-51.315,51.315v189.754h-5.012c-11.418,0-20.678,9.251-20.678,20.679v125.404 c0,11.427,9.259,20.677,20.678,20.677h5.012v22.995c0,28.305,23.025,51.315,51.315,51.315h264.223 c28.272,0,51.3-23.011,51.3-51.315V121.449L315.458,0z M99.053,284.379c6.06-1.024,14.578-1.796,26.579-1.796 c12.128,0,20.772,2.315,26.58,6.965c5.548,4.382,9.292,11.615,9.292,20.127c0,8.51-2.837,15.745-7.999,20.646 c-6.714,6.32-16.643,9.157-28.258,9.157c-2.585,0-4.902-0.128-6.714-0.379v31.096H99.053V284.379z M386.034,450.713H121.811 c-10.954,0-19.874-8.92-19.874-19.889v-22.995h246.31c11.42,0,20.679-9.25,20.679-20.677V261.748 c0-11.428-9.259-20.679-20.679-20.679h-246.31V51.315c0-10.938,8.921-19.858,19.874-19.858l181.89-0.19v67.233 c0,19.638,15.934,35.587,35.587,35.587l65.862-0.189l0.741,296.925C405.891,441.793,396.987,450.713,386.034,450.713z M174.065,369.801v-85.422c7.225-1.15,16.642-1.796,26.58-1.796c16.516,0,27.226,2.963,35.618,9.282 c9.031,6.714,14.704,17.416,14.704,32.781c0,16.643-6.06,28.133-14.453,35.224c-9.157,7.612-23.096,11.222-40.125,11.222 C186.191,371.092,178.966,370.446,174.065,369.801z M314.892,319.226v15.996h-31.23v34.973h-19.74v-86.966h53.16v16.122h-33.42 v19.875H314.892z" />{" "}   </g>{" "} </g></svg>
+                  Generate PDF
+                </button>
+              </Box>
+              <Box className='my-4 mx-1'>
+                <button onClick={handleExportToExcel} type="button" data-modal-toggle="add-user-modal" className="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center bg-green-600 text-white rounded sm:w-auto">
+                  <svg className="w-5 h-5 mr-2 -ml-1" fill="currentColor" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 26 26" xmlSpace="preserve"> <g id="SVGRepo_bgCarrier" strokeWidth={0} /> <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" /> <g id="SVGRepo_iconCarrier"> {" "} <g>   {" "}   <path d="M25.162,3H16v2.984h3.031v2.031H16V10h3v2h-3v2h3v2h-3v2h3v2h-3v3h9.162 C25.623,23,26,22.609,26,22.13V3.87C26,3.391,25.623,3,25.162,3z M24,20h-4v-2h4V20z M24,16h-4v-2h4V16z M24,12h-4v-2h4V12z M24,8 h-4V6h4V8z" />{" "}   <path d="M0,2.889v20.223L15,26V0L0,2.889z M9.488,18.08l-1.745-3.299c-0.066-0.123-0.134-0.349-0.205-0.678 H7.511C7.478,14.258,7.4,14.494,7.277,14.81l-1.751,3.27H2.807l3.228-5.064L3.082,7.951h2.776l1.448,3.037 c0.113,0.24,0.214,0.525,0.304,0.854h0.028c0.057-0.198,0.163-0.492,0.318-0.883l1.61-3.009h2.542l-3.037,5.022l3.122,5.107 L9.488,18.08L9.488,18.08z" />{" "} </g>{" "} </g></svg>
+                  Generate Excel
+                </button>
+              </Box>
+            </Box>
             <DialogContentText id="alert-dialog-description">
-              <DialogTitle id="alert-dialog-title" className='text-center'>
+              <DialogTitle id="alert-dialog-title" className='text-center font-bold text-black md:text-2xl mb-3'>
                 {"Empoloyee List"}
               </DialogTitle>
-              <div className="flex flex-col">
+              <Box className="flex flex-col">
                 <div className="overflow-x-auto">
                   <div className="inline-block min-w-full align-middle">
-                    <div className="overflow-hidden shadow">
+                    <div className="overflow-hidden shadow border-2 border-gray-300">
                       <table className="min-w-full divide-y divide-gray-200 table-fixed">
                         <thead className="bg-gray-100">
                           <tr>
@@ -331,7 +361,7 @@ export default function Model({ open, handleClose, modelType, getEmployees, show
                         <tbody className="bg-white divide-y divide-gray-200">
                           {
                             employees.map((row) => (
-                              <tr className="hover:bg-gray-100" key={row.id}>
+                              <tr key={row.id}>
                                 <td className="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
                                   <div className="text-base font-medium text-gray-600">
                                     {row.employee_name}
@@ -360,11 +390,11 @@ export default function Model({ open, handleClose, modelType, getEmployees, show
                     </div>
                   </div>
                 </div>
-              </div>
+              </Box>
             </DialogContentText>
-            <div className='flex justify-end my-10'>
+            <Box className='flex justify-end my-10'>
               <Button onClick={handleClose} variant='outlined' className='w-32' color='info'>Close</Button>
-            </div>
+            </Box>
           </DialogContent>
         </Dialog>
       </div>
