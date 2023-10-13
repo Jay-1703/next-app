@@ -30,7 +30,7 @@ export const authOptions = {
                 return user;
               }
               else {
-               console.log('password is worng !!');
+                console.log('password is worng !!');
               }
             }
             else {
@@ -39,11 +39,15 @@ export const authOptions = {
           }
           else {
             if (credentials?.name) {
-              const res = await prisma.users.create({ data: { username: credentials.name, email: credentials.email , password:credentials.password} });
+              const res = await prisma.users.create({ data: { username: credentials.name, email: credentials.email, password: credentials.password } });
               return res;
-            } else if(credentials?.name && !credentials.password){
-              let password = Math.floor(Math.random() * 1000);
-              const res = await prisma.users.create({ data: { username: credentials.name, email: credentials.email , password:credentials.password} });
+            } else if (credentials?.name && !credentials.password) {
+              const generateRandomNumber = () => {
+                return Math.floor(Math.random() * 9999) + 1;
+              };
+              const userPassword = generateRandomNumber();
+              const res = await prisma.users.create({ data: { username: credentials.name, email: credentials.email, password: userPassword.toString() } });
+              console.log("New user : ", res);
               return res;
             }
             else {
@@ -61,15 +65,20 @@ export const authOptions = {
   callbacks: {
     async session({ session }) {
       try {
-        const res = await prisma.users.findMany({ where: { email: session.user.email } });
+        const res = await prisma.users.findMany({
+          where: { email: session.user.email }
+        });
         const userdata = res[0];
         if (userdata) {
           session.user.name = userdata.username;
           session.user.email = userdata.email;
         } else {
           if (session?.user?.name && !session?.user?.password) {
-            let password = Math.floor(Math.random() * 1000);
-            const res = await prisma.users.create({ data: { username: session.user.name, email: session.user.email ,password : password.toString()} });
+            const generateRandomNumber = () => {
+              return Math.floor(Math.random() * 9999) + 1;
+            };
+            const userPassword = generateRandomNumber();
+            const res = await prisma.users.create({ data: { username: session.user.name, email: session.user.email, password: userPassword.toString() } });
             session.user.name = res.username;
             session.user.email = res.email;
           } else {

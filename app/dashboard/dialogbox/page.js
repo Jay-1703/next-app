@@ -11,6 +11,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box, Grid, OutlinedInput } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 export default function Model({ open, handleClose, modelType, getEmployees, showOneEmployee, id, updateEmployeeData, handleClickSnackbar, setOpenSnackbarType, employees }) {
 
@@ -18,9 +22,9 @@ export default function Model({ open, handleClose, modelType, getEmployees, show
   const [email, setEmail] = React.useState(null);
   const [city, setCity] = React.useState(null);
   const [number, setNumber] = React.useState(null);
+  // const [role, setRole] = React.useState(null);
 
   const [loading, setLoading] = React.useState(false);
-
   //--------------- Delete employee --------------
   const deleteEmployee = async () => {
     const res = await axios.delete(`/api/dashboard/deleteemployee/${id}`);
@@ -53,7 +57,8 @@ export default function Model({ open, handleClose, modelType, getEmployees, show
       'name': name ? name : updateEmployeeData[0].employee_name,
       'email': email ? email : updateEmployeeData[0].email,
       'city': city ? city : updateEmployeeData[0].city,
-      'number': number ? number : updateEmployeeData[0].number
+      'number': number ? number : updateEmployeeData[0].number,
+      // 'role': role ? role : updateEmployeeData[0]?.employee_role[0].employee_role
     };
     const res = await axios({
       url: '/api/dashboard/updateemployee',
@@ -218,6 +223,14 @@ export default function Model({ open, handleClose, modelType, getEmployees, show
                           defaultValue={data.number}
                         />
                       </Grid>
+                      {/* <Grid item xs={12}>
+                        <OutlinedInput
+                          className='h-10 placeholder-gray-600 font-semibold font-sans rounded-lg'
+                          fullWidth
+                          disabled
+                          defaultValue={data.employee_role[0].employee_role}
+                        />
+                      </Grid> */}
                     </Grid>
                   )
                 })}
@@ -299,6 +312,24 @@ export default function Model({ open, handleClose, modelType, getEmployees, show
                       name='number'
                     />
                   </Grid>
+                  {/* <Grid item xs={12}>
+                    {updateEmployeeData[0]?.employee_role[0].employee_role == "employee" ? <p className='text-sm text-red-600 my-1 ml-1'>You are not authorized to update role !</p> : null}
+                    <FormControl className='w-full'>
+                      <Select
+                        defaultValue={updateEmployeeData[0]?.employee_role[0].employee_role}
+                        onChange={(e) => { setRole(e.target.value) }}
+                        displayEmpty
+                        className='h-10'
+                        disabled={updateEmployeeData[0]?.employee_role[0].employee_role == "employee"}
+                      >
+                        <MenuItem value={updateEmployeeData[0]?.employee_role[0].employee_role}>
+                          <em>{updateEmployeeData[0]?.employee_role[0].employee_role}</em>
+                        </MenuItem>
+                        <MenuItem value="employee">employee</MenuItem>
+                        <MenuItem value="manager">manager</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid> */}
                 </Grid>
                 <DialogActions>
                   <Button onClick={handleClose} variant='outlined' color='info'>Cancel</Button>
@@ -351,7 +382,7 @@ export default function Model({ open, handleClose, modelType, getEmployees, show
                               Email
                             </th>
                             <th scope="col" className="p-4 text-sm font-semibold text-left text-gray-900 uppercase">
-                              Number
+                              Phone number
                             </th>
                             <th scope="col" className="p-4 text-sm font-semibold text-left text-gray-900 uppercase">
                               City

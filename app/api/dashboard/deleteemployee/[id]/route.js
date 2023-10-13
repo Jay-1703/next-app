@@ -8,3 +8,9 @@ export async function DELETE(req,{params}) {
         console.log("Error:", error);
     }
 }
+// const employee_role = await prisma.employeerole.findMany({where:{employeeId:parseInt(params.id)}});
+// if (employee_role) {
+//     await prisma.employeerole.delete({
+//       where: { id: employee_role[0].id }
+//     });
+// }

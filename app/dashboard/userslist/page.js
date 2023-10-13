@@ -111,11 +111,10 @@ export default function Userslist() {
   }
 
   //--------------- Export-PDF --------------
-  const exportPDF = async () =>{
+  const exportPDF = async () => {
     setModelType("PDF");
     handleClickOpen();
   }
-  
   return (
     <div>
       <div className="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5">
@@ -138,7 +137,7 @@ export default function Userslist() {
             <div className="flex items-center ml-auto space-x-2 sm:space-x-3">
               <button onClick={exportPDF} type="button" data-modal-toggle="add-user-modal" className="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center bg-blue-600 text-white rounded sm:w-auto">
                 <svg className="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"/>
+                  <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd" />
                 </svg>
                 Export
               </button>
@@ -238,7 +237,6 @@ export default function Userslist() {
                               {row.city}
                             </div>
                           </td>
-
                           <td className="p-4 space-x-2 whitespace-nowrap">
                             <IconButton onClick={() => { deleteEmployee(row.id) }} aria-label="delete" size='small' className='bg-rose-100 text-red-600 hover:bg-rose-100 mx-1'>
                               <DeleteIcon />
@@ -261,7 +259,7 @@ export default function Userslist() {
       </div>
 
       {/* --------------- Model -------------- */}
-      <Model open={open} handleClose={handleClose} modelType={modelType} showOneEmployee={showOneEmployee} id={id} getEmployees={getEmployees} updateEmployeeData={updateEmployeeData} handleClickSnackbar={handleClickSnackbar} setOpenSnackbarType={setOpenSnackbarType} employees={employees}/>
+      <Model open={open} handleClose={handleClose} modelType={modelType} showOneEmployee={showOneEmployee} id={id} getEmployees={getEmployees} updateEmployeeData={updateEmployeeData} handleClickSnackbar={handleClickSnackbar} setOpenSnackbarType={setOpenSnackbarType} employees={employees} />
       <Snackbars handleCloseSnackbar={handleCloseSnackbar} openSnackbar={openSnackbar} openSnackbarType={openSnackbarType} />
     </div>
   );
